@@ -1,0 +1,42 @@
+import type { AuditLogsFiltersReduxState } from "@appsmith/reducers/auditLogsReducer";
+import type { DropdownOptionProps } from "../types";
+
+export function payloadToQueryParams(
+  payload: AuditLogsFiltersReduxState & { cursor?: number },
+) {
+  const temp = {
+    events: payload.selectedEvents.map(
+      (event: DropdownOptionProps) => event.value,
+    ),
+    emails: payload.selectedEmails.map(
+      (event: DropdownOptionProps) => event.value,
+    ),
+    resourceId: payload.resourceId,
+    sortOrder: payload.dateSortOrder === "DESC" ? 0 : 1,
+    startDate: payload.startDate,
+    endDate: payload.endDate,
+  };
+  const out: any = {};
+  if (temp.events.length > 0) {
+    out.events = temp.events;
+  }
+  if (temp.emails.length > 0) {
+    out.emails = temp.emails;
+  }
+  if (temp.resourceId.length > 0) {
+    out.resourceId = temp.resourceId;
+  }
+  if (temp.sortOrder > 0) {
+    out.sortOrder = temp.sortOrder;
+  }
+  if (temp.startDate > 0) {
+    out.startDate = temp.startDate;
+  }
+  if (temp.endDate > 0) {
+    out.endDate = temp.endDate;
+  }
+  if (payload.cursor != null && payload.cursor > 0) {
+    out.cursor = payload.cursor;
+  }
+  return out;
+}
